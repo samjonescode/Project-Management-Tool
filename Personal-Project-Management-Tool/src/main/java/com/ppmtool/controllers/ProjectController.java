@@ -29,9 +29,8 @@ public class ProjectController {
 											  BindingResult result){
 		//binding result analyzes the object to see if there are errors
 		ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-		if(errorMap!=null) return errorMap;
+		if(errorMap.getStatusCode().equals(HttpStatus.BAD_REQUEST)) return errorMap;
 
-		System.out.println("Hiteeeeeeeeeeeeeeeeee");
 		Project p = projectService.saveOrUpdateProject(project);
 		return new ResponseEntity<Project>(p, HttpStatus.CREATED);
 	}
