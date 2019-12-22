@@ -1,6 +1,7 @@
 package com.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -29,9 +30,21 @@ public class Project {
 	private Date created_at;
 	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date updated_at;
-	
+
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project") //the project is the owner.. if it's gone, the other dependents disappear
+	@JsonIgnore
+	private Backlog backlog;
+
 	public Project() {
 		// TODO Auto-generated constructor stub
+	}
+
+	public Backlog getBacklog() {
+		return backlog;
+	}
+
+	public void setBacklog(Backlog backlog) {
+		this.backlog = backlog;
 	}
 
 	@PrePersist
