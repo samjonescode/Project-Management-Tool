@@ -9,5 +9,6 @@ public interface ProjectTaskRepository extends CrudRepository<ProjectTask, Long>
 
     List<ProjectTask> findByProjectIdentifierOrderByPriority(String backlog_id);
 
+    ProjectTask findByProjectSequence(String sequence);
 
 }

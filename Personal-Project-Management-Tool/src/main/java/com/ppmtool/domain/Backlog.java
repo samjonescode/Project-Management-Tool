@@ -21,7 +21,7 @@ public class Backlog {
     @JsonIgnore
     private Project project;
     //OneToMany with the project tasks
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "backlog") // deletes all tasks when the backlog is deleted
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "backlog", orphanRemoval = true) // deletes all tasks when the backlog is deleted
     private List<ProjectTask> projectTaskList = new ArrayList<>();
     public Backlog() {
     }
