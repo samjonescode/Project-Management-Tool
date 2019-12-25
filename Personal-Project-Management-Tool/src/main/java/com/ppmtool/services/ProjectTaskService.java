@@ -26,10 +26,13 @@ public class ProjectTaskService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask){
-       try {
+    @Autowired
+    private ProjectService projectService;
+
+    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask, String username){
+//       try {
            //PT to be added to a specific project, so project cant be null
-           Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+           Backlog backlog = projectService.findProjectByIdentifier(projectIdentifier, username).getBacklog();
            // need a backlog object to refer to
            projectTask.setBacklog(backlog);
            // have to set the bl to the pt
@@ -47,16 +50,17 @@ public class ProjectTaskService {
            if(projectTask.getStatus()=="" || projectTask.getStatus()==null){
                projectTask.setStatus("TO_DO");
            }
-           if(projectTask.getPriority()==null){
+           if(projectTask.getPriority()==null || projectTask.getPriority()==0){
                projectTask.setPriority(3); //low priority as default
            }
            System.out.println(projectTask);
            return projectTaskRepository.save(projectTask);
-       } catch (Exception e){
-           throw new ProjectNotFoundException("Task already exists.");
-//           e.printStackTrace();
        }
-    }
+//       catch (Exception e){
+//           throw new ProjectNotFoundException("Task already exists.");
+////           e.printStackTrace();
+//       }
+//    }
 
     public Iterable<ProjectTask> findBackLogById(String backlog_id) {
 
