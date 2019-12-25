@@ -1,6 +1,7 @@
 package com.ppmtool.services;
 
 import com.ppmtool.domain.User;
+import com.ppmtool.exceptions.UserExistsException;
 import com.ppmtool.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,11 +16,16 @@ public class UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User saveUser (User newUser){
-        newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
 
         //username has to be unique
+        try {
+            newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+            //confirm pw must match...
+            return userRepository.save(newUser);
+        } catch (Exception e){
+            throw new UserExistsException("Username '" + newUser.getUsername() + "' exists.");
+        }
 
             //password and confirmPassword must match
-        return userRepository.save(newUser);
     }
 }

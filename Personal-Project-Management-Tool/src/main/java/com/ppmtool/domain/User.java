@@ -33,6 +33,8 @@ public class User implements UserDetails {
     private Date created_at;
     private Date updated_at;
 
+    //OneToMany with project
+
     public User() {
     }
 
