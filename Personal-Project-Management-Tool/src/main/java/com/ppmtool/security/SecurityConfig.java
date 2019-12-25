@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.ppmtool.security.SecurityConstants.H2_URL;
 import static com.ppmtool.security.SecurityConstants.SIGN_UP_URLS;
@@ -27,6 +28,8 @@ import static com.ppmtool.security.SecurityConstants.SIGN_UP_URLS;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(){ return new JwtAuthenticationFilter();}
     @Autowired
     private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
@@ -71,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(H2_URL).permitAll() //permit access to h2 without sign in
                 .anyRequest().authenticated(); //other than these routes everything needs authentication
 
-
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 
